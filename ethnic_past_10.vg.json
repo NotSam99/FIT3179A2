@@ -1,0 +1,83 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 700,
+  "height": 400,
+  "params": [{
+    "name": "Year_selection",
+    "value": 2025,
+    "bind": {
+      "input": "select",
+      "options": [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+      "labels": ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"],
+      "name": "Select Year: "
+    }
+  }],
+  "data": {
+    "url": "data/ethnc_past10_pop.csv"
+  },
+  "transform": [
+    {"filter": "datum.ethnicity != 'Overall'"},
+    {"filter": "datum.date == Year_selection"},
+    {
+      "joinaggregate": [{
+        "op": "sum",
+        "field": "population",
+        "as": "total_population"
+      }]
+    },
+    {
+      "calculate": "datum.population/datum.total_population * 100",
+      "as": "percentage"
+    }
+  ],
+  "layer": [{
+    "mark": {"type": "arc", "innerRadius": 50, "outerRadius": 150, "stroke": "#fff"},
+    "encoding": {
+      "theta": {"field": "population", "type": "quantitative", "stack": true},
+      "color": {
+        "field": "ethnicity",
+        "type": "nominal",
+        "scale": {
+          "domain": ["Malay", "Chinese", "Indian", "Other Bumiputera", "Others"],
+          "range": ["blue", "red", "purple", "pink", "orange"]
+        },
+        "legend": {"title": "Ethnicity"}
+      },
+      "tooltip": [
+        {"field": "ethnicity", "type": "nominal", "title": "Ethnicity"},
+        {"field": "population", "type": "quantitative", "title": "Population", "format": ",.0f"},
+        {"field": "percentage", "type": "quantitative", "title": "Percentage (%)", "format": ".1f"}
+      ]
+    }
+  },
+  {
+    "mark": {"type": "text", "align": "center", "fontSize": 16, "fontWeight": "bold"},
+    "encoding": {
+      "text": {"field": "total_population", "type": "quantitative", "format": ",.0f"}
+    }
+  },
+  {
+    "mark": {
+      "type": "text",
+      "radius": 100,
+      "fontSize": 16,
+      "fontWeight": "bold",
+      "color": "white",
+      "align": "center",
+      "baseline": "middle"
+    },
+    "encoding": {
+      "theta": {"field": "population", "type": "quantitative", "stack": true},
+      "text": {
+        "condition": {
+          "test": "datum.percentage > 2",
+          "field": "percentage",
+          "type": "quantitative",
+          "format": ".1f"
+        },
+        "value": ""
+      },
+      "order": {"field": "ethnicity"}
+    }
+  }]
+}

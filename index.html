@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Malaysia Population Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    
+    .page-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .title-container {
+      position: relative;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+    .flag-image {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 100px;
+      width: auto;
+    }
+    .main-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0 100px;
+    }
+    .main-subtitle {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 20px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 60px;
+      font-weight: 400;
+    }
+    .row {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    @media (max-width: 1200px) {
+      .chart-container, .text-container {
+        flex: 0 1 100%;
+      }
+      .text-container {
+        max-width: 800px;
+      }
+    }
+    .chart-container {
+      flex: 2;
+      background: white;
+      padding: 25px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 800px;
+    }
+    .text-container {
+      flex: 1;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+    .chart-description {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: "black";
+      font-weight: 400;
+      text-align: left;
+      width: 100%;
+    }
+    .section-banner {
+      width: 99%;
+      background-color: #91a2ed;
+      color: black;
+      padding: 10px;
+      margin-bottom: 5px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 8px;
+      font-family: 'Times New Roman', Times, serif;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section-container {
+      margin-bottom: 60px;
+    }
+    .metadata-section {
+      background-color: white;
+      padding: 25px;
+      border-radius: 5px;
+      margin-top: 40px;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .metadata-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: black;
+      margin-top: 15px;
+    }
+    body {
+      background-color: #f0f7f7;
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <div class="title-container">
+      <img src="https://flagcdn.com/my.svg" class="flag-image">
+      <h1 class="main-title">Malaysia's Population Demographics</h1>
+    </div>
+    <p class="main-subtitle">Malaysia is a multiracial Southeast Asian country that is diverse in culture.<br> This visualization explores its demographic patterns from 2016 to 2025.</p>
+
+    <div class="section-container">
+      <div class="section-banner">Population Growth Trend (2016-2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="line-chart"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            For the past decade, Malaysia has experienced steady population growth.
+            However, there was a <b>decline</b> in population from 2019 to 2020, likely due to the <span style="color: red;">Covid-19</span> pandemic.
+          </p> 
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <div class="section-banner">State Population Distribution (2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="map"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            The <b>region</b> with the <b>highest</b> population density is <span style="color: red;">Kuala Lumpur</span>, the capital city of Malaysia.
+            The <b>state</b> with the <b>lowest</b> population density is <span style="color: green;">Sarawak</span>, the biggest state in Malaysia by land area.
+            The <b></b>state</b> with the <b>highest</b> population is <span style="color: teal;">Penang</span>, with a population of over 1.8 million people.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <div class="section-banner">Gender Distribution (2016-2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="stacked-chart"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            The gender distribution in Malaysia shows a relatively balanced ratio between <span style="color: rgb(43, 142, 209);">males</span> and <span style="color: hotpink;">females</span> over the past decade.
+            There is consistent growth in both male and female populations while maintaining a <b>near-equal</b> distribution.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <div class="section-banner">Ethnic Composition (2016-2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="donut-chart"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            <span style="color: blue;">Malay</span> population is the largest ethnic group in Malaysia, making up over half of the total population.
+            The <span style="color: red;">Chinese</span> and <span style="color: pink;">other Bumiputera</span> (Indigenous) groups also constitute significant portions of the minority.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <div class="section-banner">Age Demographics (2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="lollipop-chart"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            The population shows a steady <b>increase</b> from the youngest age group (0–4) up to the <span style="color: red;">(20–24)</span> age group, which marks the peak. 
+            After this point, the population begins to <b>decline</b> gradually with each successive age group, indicating a youthful demographic structure with fewer individuals in older age brackets.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <div class="section-banner">Citizen and Non-Citizen Age Distribution (2025)</div>
+      <div class="row">
+        <div class="chart-container">
+          <div id="butterfly-chart"></div>
+        </div>
+        <div class="text-container">
+          <p class="chart-description">
+            <span style="color: darkorange;">Non-citizens</span> are concentrated in the <b>working-age</b> groups, particularly between 20-34 years old,
+            while <span style="color: rgb(43, 142, 209);">citizens</span> have a more balanced distribution across age groups.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="metadata-section">
+      <div class="section-banner">Metadata</div>
+      <div class="metadata-content">
+        <b>Author:</b> Yap Sam Kit<br>
+        <b>Last Updated:</b> 21 October 2025<br>
+        <b><u>Data Sources</u></b><br>
+        Malaysian Population by Year (data.gov.my )<br>
+        https://data.gov.my/data-catalogue/population_malaysia<br><br>
+
+        Malaysian Population by State (OpenDOSM)<br>
+        https://open.dosm.gov.my/data-catalogue/population_state<br><br>
+
+        Area for Malaysian States (Wikipedia )<br>
+        https://en.wikipedia.org/wiki/States_and_federal_territories_of_Malaysia<br>
+
+      </div>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+    vegaEmbed('#map', 'statepopulationmap.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+    vegaEmbed('#line-chart', 'past_10_msy_line.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+    vegaEmbed('#lollipop-chart', 'age_2025_lollipop.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+    vegaEmbed('#donut-chart', 'ethnic_past_10.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+    vegaEmbed('#stacked-chart', 'sex_2025_stack.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+    vegaEmbed('#butterfly-chart', 'foreign_age_butterfly.vg.json', {mode: "vega-lite"})
+      .then(console.log)
+      .catch(console.warn);
+  </script>
+</body>
+</html>

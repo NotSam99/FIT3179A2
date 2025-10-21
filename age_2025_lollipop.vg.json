@@ -1,0 +1,127 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Horizontal lollipop chart showing Malaysia's population by age group in 2025.",
+  "data": {
+    "url": "data/age_2025_pop.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {
+      "calculate": "datum.age == '80+' ? 80 : parseInt(substring(datum.age, 0, 2))",
+      "as": "age_num"
+    }
+  ],
+  "width": 700,
+  "height": 400,
+  "layer": [
+    {
+      "mark": {"type": "bar", "size": 6},
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.age === '20-24'",
+            "value": "red"
+          },
+          "value": "darkgray"
+        },
+        "y": {
+          "field": "age",
+          "type": "ordinal",
+          "title": "Age Group",
+          "sort": [
+            "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34",
+            "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+            "65-69", "70-74", "75-79", "80+"
+          ],
+          "axis": {"labelFontSize": 12}
+        },
+        "x": {
+          "field": "population",
+          "type": "quantitative",
+          "title": "Population",
+          "axis": {"format": ",d"}
+        },
+        "tooltip": [
+          {"field": "age", "title": "Age Group"},
+          {"field": "population", "title": "Population", "format": ",d"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "circle", "size": 100},
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.age === '20-24'",
+            "value": "red"
+          },
+          "value": "darkgray"
+        },
+        "y": {
+          "field": "age",
+          "type": "ordinal",
+          "sort": [
+            "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34",
+            "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+            "65-69", "70-74", "75-79", "80+"
+          ]
+        },
+        "x": {
+          "field": "population",
+          "type": "quantitative",
+          "axis": {"format": ",d"}
+        },
+        "tooltip": [
+          {"field": "age", "title": "Age Group"},
+          {"field": "population", "title": "Population", "format": ",d"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "fontSize": 12
+      },
+      "encoding": {
+        "text": {"value": "Peak Age Group"},
+        "y": {
+          "field": "age",
+          "type": "ordinal",
+          "sort": [
+            "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34",
+            "35-39", "40-44", "45-49", "50-54", "55-59", "60-64",
+            "65-69", "70-74", "75-79", "80+"
+          ]
+        },
+        "x": {"field": "population", "type": "quantitative"},
+        "opacity": {
+          "condition": {
+            "test": "datum.age === '20-24'",
+            "value": 1
+          },
+          "value": 0
+        },
+        "color": {"value": "black"}
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"labelFontSize": 12, "titleFontSize": 14}
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
